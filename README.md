@@ -16,7 +16,7 @@ This is meant to be a starter for anyone who seems to be interested in IOT and w
 - Breadboard (recommended) 
 - A computer
 
-<img src="https://imgur.com/07SiAko">
+<img src="https://imgur.com/07SiAko.png">
 
 ## Instructions
 1. Clone the repository in your desired directory location.
