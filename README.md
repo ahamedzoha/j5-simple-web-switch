@@ -31,4 +31,6 @@ This is meant to be a starter for anyone who seems to be interested in IOT and w
 8. Have fun switching the LED on/off!
 
 
+## In Action!
+<img src="https://media.giphy.com/media/yNs9Kcblt11judUtON/giphy.gif"> <img src="https://media.giphy.com/media/5Syem6j1eZu7qcgxsI/giphy.gif">
 
