@@ -1,24 +1,32 @@
+//THIS IS ESSENTIALLY THE SERVER
+//IT'S MAIN PURPOSE IS TO GET THE DATA FROM THE CLIENT AND SEND IT TO THE BOARD
+//IT ALSO HANDLES ROUTES CREATED BY EXPRESS TO SERVE THE MAIN WEBPAGE
+
 const five = require('johnny-five');
 const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
-
+//SERVE STATIC FILES FROM '/PUBLIC' DIRECTORY (CLIENT -> HTML, CSS & JS)
 app.use(express.static(__dirname + '/public'));
 
+//INITIALIZE JOHNNY FIVE BOARD
 five.Board().on('ready', () => {
   console.log(`Arduino is Ready!`);
 
+  //INITIALIZE AN LED ON PIN 13 OF AN UNO BOARD
   let led = new five.Led(13)
 
+  //ESTABLISH SOCKET CONNECTION
   io.on('connection', (socket) => {
     console.log('A client connected');
 
     socket.on('disconnect', () => {
       console.log(`Client disconnected`);
     })
-
+    
+    //RECEIVE 'ledState -> true|false' FROM CLIENT AND CONDITIONALLY TURN LED ON OR OFF
     socket.on('ledState', (state) => {
       if (state == true) {
         led.on()
