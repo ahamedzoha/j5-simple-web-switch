@@ -38,6 +38,8 @@ five.Board().on('ready', () => {
         led.off()
         console.log(`Turned lights off!`);
       }
+      //SEND THE STATE OF LED TO THE CLIENTS SO THAT,
+      //IF ONE SWITCHES THE LIGHT ON, IT SHOWS ON ALL CLIENTS
       io.emit('ledState', state)
     })
 
