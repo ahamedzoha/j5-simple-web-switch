@@ -8,6 +8,8 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
+let ledState
+
 //SERVE STATIC FILES FROM '/PUBLIC' DIRECTORY (CLIENT -> HTML, CSS & JS)
 app.use(express.static(__dirname + '/public'));
 
@@ -20,12 +22,12 @@ five.Board().on('ready', () => {
 
   //ESTABLISH SOCKET CONNECTION
   io.on('connection', (socket) => {
-    console.log('A client connected');
+    console.log(`client ${socket.id} connected`);
 
     socket.on('disconnect', () => {
-      console.log(`Client disconnected`);
+      console.log(`client ${socket.id} disconnected`);
     })
-    
+
     //RECEIVE 'ledState -> true|false' FROM CLIENT AND CONDITIONALLY TURN LED ON OR OFF
     socket.on('ledState', (state) => {
       if (state == true) {
@@ -36,8 +38,9 @@ five.Board().on('ready', () => {
         led.off()
         console.log(`Turned lights off!`);
       }
+      io.emit('ledState', state)
     })
-    
+
   })
 
 })

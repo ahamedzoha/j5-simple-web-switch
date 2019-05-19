@@ -9,9 +9,14 @@ let led = document.getElementById('shwitch')
 let emitValue = () => {
     socket.emit('ledState',led.checked)
 }
+//RECEIVE THE LED STATE FROM SERVER AND SET THE PAGE SWITCH STATE
+socket.on('ledState', state => {
+    led.checked = state
+})
 
 //EVENT LISTENER TO ACTIVATE emitValue() FUNCTION IF 
 //THERE IS ANY CHANGES TO THE STATE OF THE BROWSER SWITCH
 led.addEventListener('change', emitValue.bind())
+
 
 
