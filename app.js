@@ -20,7 +20,6 @@ app.use(express.static(__dirname + '/public'));
 
 //INITIALIZE JOHNNY FIVE BOARD
 board.on('ready', () => {
-  port: "COM3"
   console.log(`Arduino is Ready!`);
 
   //INITIALIZE AN LED ON PIN 13 OF AN UNO BOARD
