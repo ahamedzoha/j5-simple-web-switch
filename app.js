@@ -50,7 +50,7 @@ board.on('ready', () => {
       //SEND THE STATE OF LED TO THE CLIENTS SO THAT,
       //IF ONE SWITCHES THE LIGHT ON, IT SHOWS ON ALL CLIENTS
       console.log(state);
-      io.emit('blueLedState', state)
+      io.emit('redLedState', state)
       
     })
 
