@@ -10,9 +10,8 @@ const io = require('socket.io')(server);
 
 let ledState
 
-//Specify port for either Mac Windows or Linux (refer to the Arduino IDE for port)
 let board = new five.Board({
-  port:"COM3"
+  //port:"COM3" //SPECIFY PORT ON WINDOWS, LEAVE COMMENTED ON MAC or LINUX
 })
 
 //SERVE STATIC FILES FROM '/PUBLIC' DIRECTORY (CLIENT -> HTML, CSS & JS)
