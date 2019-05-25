@@ -25,6 +25,22 @@ board.on('ready', () => {
   const ledBlue = new five.Led(13)
   const ledRed = new five.Led(12)
 
+  //INITIALIZE GAS SENSOR
+  const mq2 = new five.Sensor("A0")
+
+  //INITIALIZE RELAY 1 & 2 SEPARATELY
+  const relay1 = new five.Relay(6)
+  const relay2 = new five.Relay(5)
+
+  //relay1.off()
+  //relay2.off()
+
+  mq2.on("change", () => {
+    console.log(mq2.scaleTo(0, 100))
+    if(mq2.scaleTo(0, 100) > 30) relay1.on()
+  })
+
+
   //ESTABLISH SOCKET CONNECTION
   io.on('connection', (socket) => {
     console.log(`client ${socket.id} connected`);
@@ -35,8 +51,14 @@ board.on('ready', () => {
 
     //RECEIVE 'ledState -> true|false' FROM CLIENT AND CONDITIONALLY TURN LED ON OR OFF
     socket.on('blueLedState', (state) => {
-      if (state.checked == true) ledBlue.on()
-      if (state.checked == false) ledBlue.off()
+      if (state.checked == true){
+        ledBlue.on()
+        //relay1.on()
+      } 
+      if (state.checked == false) {
+        ledBlue.off()
+        //relay1.off()
+      }
 
       //SEND THE STATE OF LED TO THE CLIENTS SO THAT,
       //IF ONE SWITCHES THE LIGHT ON, IT SHOWS ON ALL CLIENTS
@@ -45,13 +67,19 @@ board.on('ready', () => {
     })
 
     socket.on('redLedState', state => {
-      if (state.checked == true) ledRed.on()
-      if (state.checked == false) ledRed.off()
+      if (state.checked == true) {
+        ledRed.on()
+        //relay2.on()
+      }
+      if (state.checked == false) {
+        ledRed.off()
+        //relay2.off()
+      }
       //SEND THE STATE OF LED TO THE CLIENTS SO THAT,
       //IF ONE SWITCHES THE LIGHT ON, IT SHOWS ON ALL CLIENTS
       console.log(state);
       io.emit('redLedState', state)
-      
+
     })
 
   })
