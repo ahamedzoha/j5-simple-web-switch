@@ -35,6 +35,8 @@ socket.on('redLedState', state => {
     console.log(`socket State ${state.ledColor}`);
 })
 
+
+
 //EVENT LISTENER TO ACTIVATE emitValue() FUNCTION IF 
 //THERE IS ANY CHANGES TO THE STATE OF THE BROWSER SWITCH
 ledBlue.addEventListener('change', emitValueBlue.bind(null, 'blue', this.checked))
@@ -45,41 +47,70 @@ ledRed.addEventListener('change', emitValueRed.bind(null, 'red', this.checked))
 let ctx = document.getElementById('sensorGraph')
 
 let sensorChart = new Chart(ctx, {
-    type: 'bar',
+    type: 'line',
     data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        //labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
         datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
+            label: 'Combustible gas',
+            data: [],
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
             ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
+            showLines: false
         }]
     },
     options: {
         scales: {
             yAxes: [{
                 ticks: {
-                    beginAtZero: true
+                    min: 0,
+                    max: 60
                 }
             }]
-        }
+        },
+        elements: {
+            line: {
+                tension: 0
+            }
+        },
+        animation: {
+            duration: 0
+        },
+        hover: {
+            animationDuration: 0
+        },
+        responsiveAnimationDuration: 0
     }
 })
 
+console.log(moment().format("h:mm:ss a"));
+
+let addData = (chart, label, data) => {
+    chart.data.labels.push(label)
+    chart.data.datasets.forEach((dataset) => {
+        dataset.data.push(data)
+    });
+    chart.update();
+}
+
+
+let removeData = (chart) => {
+    console.log(`Grapha array length: ${chart.data.datasets[0].data.length}`);
+    if (chart.data.datasets[0].data.length > 100) {
+        chart.data.labels.shift()
+        chart.data.datasets.forEach((dataset) => {
+            dataset.data.shift()
+        });
+        chart.update()
+    }
+}
+
+let timex = moment().seconds()
+
+//RECEIVE SENSORDATA
+socket.on('sensordata', data => {
+    addData(sensorChart, timex, data)
+    removeData(sensorChart)
+})
 
 

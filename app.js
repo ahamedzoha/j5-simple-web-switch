@@ -34,12 +34,7 @@ board.on('ready', () => {
 
   //relay1.off()
   //relay2.off()
-
-  mq2.on("change", () => {
-    console.log(mq2.scaleTo(0, 100))
-    if(mq2.scaleTo(0, 100) > 30) relay1.on()
-  })
-
+  let data
 
   //ESTABLISH SOCKET CONNECTION
   io.on('connection', (socket) => {
@@ -51,10 +46,10 @@ board.on('ready', () => {
 
     //RECEIVE 'ledState -> true|false' FROM CLIENT AND CONDITIONALLY TURN LED ON OR OFF
     socket.on('blueLedState', (state) => {
-      if (state.checked == true){
+      if (state.checked == true) {
         ledBlue.on()
         //relay1.on()
-      } 
+      }
       if (state.checked == false) {
         ledBlue.off()
         //relay1.off()
@@ -80,6 +75,21 @@ board.on('ready', () => {
       console.log(state);
       io.emit('redLedState', state)
 
+    })
+    
+
+    //TRANSMITTING SENSOR READINGS VIA sensordata SOCKET
+    mq2.on("change", () => {
+      data = mq2.scaleTo(0, 100)
+      //setInterval(, 1000)
+      socket.emit('sensordata', data)
+      if(data > 30) {
+        relay1.on()
+        socket.on('redLedState', state => {
+          ledRed.on()
+          io.emit('redLedState', state)
+        })
+      }
     })
 
   })
