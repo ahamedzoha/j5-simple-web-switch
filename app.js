@@ -85,10 +85,7 @@ board.on('ready', () => {
       socket.emit('sensordata', data)
       if(data > 30) {
         relay1.on()
-        socket.on('redLedState', state => {
-          ledRed.on()
-          io.emit('redLedState', state)
-        })
+        ledRed.on()
       }
     })
 
