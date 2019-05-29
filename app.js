@@ -83,7 +83,7 @@ board.on('ready', () => {
       data = mq2.scaleTo(0, 100)
       //setInterval(, 1000)
       socket.emit('sensordata', data)
-      if(data > 30) {
+      if(data > 20) {
         relay1.on()
         ledRed.on()
       }
